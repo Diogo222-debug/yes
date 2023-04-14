@@ -1,0 +1,44 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "NPC Teleporter"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Name = "Main"
+frame.Position = UDim2.new(1, -140, 1, -80)
+frame.Size = UDim2.new(0, 120, 0, 70)
+frame.BackgroundTransparency = 0.5
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+frame.Parent = gui
+
+local label = Instance.new("TextLabel")
+label.Name = "Label"
+label.Position = UDim2.new(0, 10, 0, 10)
+label.Size = UDim2.new(0, 100, 0, 20)
+label.Text = "NPC Name:"
+label.TextColor3 = Color3.new(1, 1, 1)
+label.Parent = frame
+
+local textbox = Instance.new("TextBox")
+textbox.Name = "TextBox"
+textbox.Position = UDim2.new(0, 10, 0, 35)
+textbox.Size = UDim2.new(0, 100, 0, 20)
+textbox.Text = "Enter NPC name"
+textbox.Parent = frame
+
+-- function to teleport NPC
+local function teleportNPC()
+    local npcName = textbox.Text
+    for _,v in pairs(game.Workspace:GetDescendants()) do
+        if string.find(v.Name, npcName) and v:FindFirstChild("HumanoidRootPart") then
+            v:FindFirstChild("HumanoidRootPart").Anchored = true
+            v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-5)
+        end
+    end
+end
+
+-- bind to F key
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if input.KeyCode == Enum.KeyCode.F and not gameProcessed then
+        teleportNPC()
+    end
+end)
